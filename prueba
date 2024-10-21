@@ -1,0 +1,46 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Función para el generador de nubes hacia adelante (Forward Cloud Generator)
+def forward_cloud_generator(Ex, En, He, N):
+    """
+    Ex: Valor esperado (Expected Value)
+    En: Entropía (Entropy)
+    He: Superentropía (Hyperentropy)
+    N: Número de puntos a generar
+    """
+    # Generar puntos de nube basados en Ex, En, y He
+    drops = []
+    for i in range(N):
+        # Generar la entropía modificada con la superentropía
+        En_i = np.random.normal(En, He)
+        # Generar el punto de nube usando la entropía modificada
+        drop = np.random.normal(Ex, En_i)
+        drops.append(drop)
+    
+    return np.array(drops)
+
+# Parámetros para las dos nubes
+Ex1, En1, He1 = 5, 1, 0.1  # Parámetros de la primera nube
+Ex2, En2, He2 = 10, 2, 0.2  # Parámetros de la segunda nube
+N = 1000  # Número de puntos a generar
+
+# Generar puntos para ambas nubes
+cloud1 = forward_cloud_generator(Ex1, En1, He1, N)
+cloud2 = forward_cloud_generator(Ex2, En2, He2, N)
+
+# Visualización de los puntos generados 
+plt.figure(figsize=(10, 6))
+
+# Gráfica de la primera nube
+plt.scatter(cloud1, np.zeros_like(cloud1), color='blue', alpha=0.5, label="Nube 1 (Ex1, En1, He1)")
+
+# Gráfica de la segunda nube
+plt.scatter(cloud2, np.ones_like(cloud2), color='red', alpha=0.5, label="Nube 2 (Ex2, En2, He2)")
+
+# Añadir leyendas y etiquetas
+plt.title("Generador de Nubes Hacia Adelante (Forward Cloud Generator)")
+plt.xlabel("Valor de x")
+plt.ylabel("Categoría de Nube (0=Nube1, 1=Nube2)")
+plt.legend()
+plt.show()
